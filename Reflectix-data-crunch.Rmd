@@ -1,0 +1,32 @@
+---
+title: "Reflectix experiment"
+author: "Rob Friesel"
+date: "8/20/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library("ggplot2")
+knitr::opts_chunk$set(echo = TRUE)
+
+reflx <- read.csv("https://docs.google.com/spreadsheets/d/1rL-Si_Wd4TCPHqqgxJbUEvxjdCgxJi2NxeuELNwSLLw/gviz/tq?tqx=out:csv&sheet=as-CSV")
+
+reflx$insulation <- factor(reflx$insulation, levels = c("no insulation",
+                                                        "single layer Reflectix",
+                                                        "double layer Reflectix"))
+
+ggplot(reflx, aes(x=time, y=normalized, color=insulation)) +
+  geom_point(size = 4, aes(shape = insulation)) +
+  geom_line(size = 1.5, alpha = 0.7) +
+  scale_y_continuous(breaks = c(140,142,144,146,148,150)) +
+  scale_x_continuous(breaks = c(0, 15, 30, 45, 60)) +
+  ylab("Temperature (ºF)") +
+  xlab("Minutes Elapsed") +
+  ggtitle("Temperature Loss as a Function of Insulation") +
+  theme(legend.position = "bottom")
+  #+ geom_smooth(method = "lm")
+
+ggsave("reflectix-figure-1.png",
+       width=6, height=4, units="in",
+       dpi=300)
+```
